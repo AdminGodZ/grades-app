@@ -169,6 +169,7 @@ button:hover {
     min-width: 60%;
 }
 
+/* Delete button with border animation */
 .delete-btn {
     background: #ef4444;
     padding: 0.5rem;
@@ -177,9 +178,113 @@ button:hover {
     width: auto;
     margin-left: 1rem;
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
 }
 
-/* Removed hover effect for delete buttons */
+.delete-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    opacity: 0;
+    z-index: -1;
+}
+
+.delete-btn:hover::before {
+    opacity: 1;
+    animation: border-dance 0.8s linear forwards;
+    box-shadow: 0 0 8px 1px #9900ff;
+}
+
+@keyframes border-dance {
+    0% {
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 3px;
+        border-top: 2px solid #9900ff;
+        border-left: 0;
+        border-bottom: 0;
+        border-right: 0;
+    }
+    25% {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        border-top: 2px solid #9900ff;
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+    }
+    50% {
+        top: 0;
+        left: calc(100% - 3px);
+        width: 3px;
+        height: 100%;
+        border-right: 2px solid #9900ff;
+        border-top: 0;
+        border-bottom: 0;
+        border-left: 0;
+    }
+    75% {
+        top: calc(100% - 3px);
+        left: 0;
+        width: 100%;
+        height: 3px;
+        border-bottom: 2px solid #9900ff;
+        border-left: 0;
+        border-top: 0;
+        border-right: 0;
+    }
+    100% {
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        border-left: 2px solid #9900ff;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 0;
+    }
+}
+
+/* Same animation for subject delete button */
+.delete-subject-btn {
+    background: #ef4444;
+    padding: 0.4rem 0.75rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    width: auto;
+    margin-left: 1rem;
+    box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.delete-subject-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    opacity: 0;
+    z-index: -1;
+}
+
+.delete-subject-btn:hover::before {
+    opacity: 1;
+    animation: border-dance 0.8s linear forwards;
+    box-shadow: 0 0 8px 1px #9900ff;
+}
 
 .empty-message {
     text-align: center;
@@ -240,18 +345,6 @@ button:hover {
     flex: 1;
 }
 
-.delete-subject-btn {
-    background: #ef4444;
-    padding: 0.4rem 0.75rem;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    width: auto;
-    margin-left: 1rem;
-    box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
-}
-
-/* Removed hover effect for delete buttons */
-
 /* Chart container */
 .chart-container {
     width: 100%;
@@ -266,7 +359,7 @@ button:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #0a0010;
+    background-color: var(--bg-color);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -275,119 +368,236 @@ button:hover {
     transition: opacity 0.5s ease;
 }
 
-/* AdminGod Animation Styles */
-.container-animation {
+/* Purple Geometric Loader Styles */
+:root {
+    --purple-light: #c496ff;
+    --purple-main: #8a2be2;
+    --purple-dark: #6a0dad;
+    --purple-glow: rgba(138, 43, 226, 0.6);
+    --bg-color: #0d0118;
+}
+
+.loader-container {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
 }
 
-.text {
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.9); }
+}
+
+.hexagon {
     position: absolute;
-    font-size: 5rem;
-    font-weight: bold;
-    color: #9900ff;
-    opacity: 0;
-    text-shadow: 0 0 10px rgba(153, 0, 255, 0.5);
-    letter-spacing: 2px;
-    z-index: 10;
+    width: 100px;
+    height: 57.74px; /* height = width * sqrt(3)/2 */
+    background-color: transparent;
+    margin: 28.87px 0;
+    border-left: solid 3px var(--purple-main);
+    border-right: solid 3px var(--purple-main);
+    opacity: 0.5;
+    filter: drop-shadow(0 0 5px var(--purple-glow));
     transform: scale(0.8);
-    transition: text-shadow 0.3s ease;
 }
 
-.star {
+.hexagon:before,
+.hexagon:after {
+    content: "";
     position: absolute;
     width: 0;
-    height: 0;
-    opacity: 0;
-    left: -100px;
-    top: 50%;
-    z-index: 5;
-}
-
-.star-inner {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: #b035ff;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    filter: blur(2px);
-    box-shadow: 
-        0 0 10px 2px #9900ff,
-        0 0 20px 5px #bf00ff,
-        0 0 30px 10px #da70d6;
-    transform: translate(-50%, -50%) rotate(0deg);
-}
-
-.star-trail {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
     left: 0;
-    top: 0;
-    pointer-events: none;
 }
 
-.trail-particle {
+.hexagon:before {
+    bottom: 100%;
+    border-bottom: 28.87px solid var(--purple-main);
+}
+
+.hexagon:after {
+    top: 100%;
+    border-top: 28.87px solid var(--purple-main);
+}
+
+.hex-1 {
+    animation: rotation 8s linear infinite, pulse 3s ease-in-out infinite;
+}
+
+.hex-2 {
+    transform: scale(1.3) rotate(30deg);
+    opacity: 0.3;
+    animation: counter-rotation 12s linear infinite, pulse 4s ease-in-out infinite 0.5s;
+}
+
+.hex-3 {
+    transform: scale(1.8) rotate(60deg);
+    opacity: 0.2;
+    border-color: var(--purple-light);
+    animation: rotation 16s linear infinite, pulse 5s ease-in-out infinite 1s;
+}
+
+.hex-3:before,
+.hex-3:after {
+    border-bottom-color: var(--purple-light);
+    border-top-color: var(--purple-light);
+}
+
+@keyframes rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes counter-rotation {
+    from { transform: scale(1.3) rotate(30deg); }
+    to { transform: scale(1.3) rotate(-330deg); }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.2; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.2; }
+}
+
+.circle-container {
     position: absolute;
+    width: 140px;
+    height: 140px;
+    animation: reverse-rotation 20s linear infinite;
+}
+
+.circle-container-inner {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    animation: rotation 15s linear infinite;
+}
+
+.circle-container-outer {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    animation: reverse-rotation 25s linear infinite;
+}
+
+.circle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: rgba(153, 0, 255, 0.6);
-    filter: blur(4px);
+    background-color: var(--purple-light);
+    filter: drop-shadow(0 0 5px var(--purple-glow));
     opacity: 0;
 }
 
-.underline {
+.circle-inner {
+    width: 6px;
+    height: 6px;
+    background-color: var(--purple-main);
+}
+
+.circle-outer {
+    width: 8px;
+    height: 8px;
+    background-color: var(--purple-dark);
+}
+
+.dot-pulse {
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: scale(1) translateX(60px); }
+    50% { transform: scale(1.3) translateX(60px); }
+}
+
+.dot-trail {
     position: absolute;
+    width: 4px;
     height: 4px;
-    background: linear-gradient(90deg, rgba(153, 0, 255, 0), #9900ff, rgba(153, 0, 255, 0));
-    width: 0;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 0 10px 2px #9900ff;
-    z-index: 5;
-}
-
-.glow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(153, 0, 255, 0.4) 0%, rgba(153, 0, 255, 0) 70%);
-    opacity: 0;
-    z-index: 1;
-}
-
-/* Evil style additions */
-.evil-particles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.particle {
-    position: absolute;
-    background: #9900ff;
     border-radius: 50%;
+    background-color: var(--purple-light);
     opacity: 0;
     filter: blur(1px);
-    box-shadow: 0 0 6px 2px #9900ff;
 }
 
-@keyframes rotateStar {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+.progress-ring {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    transform: rotate(-90deg);
 }
 
-@keyframes pulseGlow {
-    0% { opacity: 0.3; transform: scale(0.9); }
-    50% { opacity: 0.8; transform: scale(1.1); }
-    100% { opacity: 0.3; transform: scale(0.9); }
+.progress-ring circle {
+    fill: transparent;
+    stroke: var(--purple-main);
+    stroke-width: 4;
+    stroke-dasharray: 251.2; /* Circumference = 2 * PI * 40 */
+    stroke-dashoffset: 251.2;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 3px var(--purple-glow));
+    transition: stroke-dashoffset 0.5s ease;
 }
+
+.loader-text {
+    position: absolute;
+    color: var(--purple-light);
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    text-shadow: 0 0 10px var(--purple-glow);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+@keyframes reverse-rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
+/* Utility for dots placement */
+.dot-1 { transform: rotate(0deg) translateX(60px); }
+.dot-2 { transform: rotate(45deg) translateX(60px); }
+.dot-3 { transform: rotate(90deg) translateX(60px); }
+.dot-4 { transform: rotate(135deg) translateX(60px); }
+.dot-5 { transform: rotate(180deg) translateX(60px); }
+.dot-6 { transform: rotate(225deg) translateX(60px); }
+.dot-7 { transform: rotate(270deg) translateX(60px); }
+.dot-8 { transform: rotate(315deg) translateX(60px); }
+
+/* Inner dots placement */
+.dot-in-1 { transform: rotate(0deg) translateX(35px); }
+.dot-in-2 { transform: rotate(60deg) translateX(35px); }
+.dot-in-3 { transform: rotate(120deg) translateX(35px); }
+.dot-in-4 { transform: rotate(180deg) translateX(35px); }
+.dot-in-5 { transform: rotate(240deg) translateX(35px); }
+.dot-in-6 { transform: rotate(300deg) translateX(35px); }
+
+/* Outer dots placement */
+.dot-out-1 { transform: rotate(0deg) translateX(80px); }
+.dot-out-2 { transform: rotate(30deg) translateX(80px); }
+.dot-out-3 { transform: rotate(60deg) translateX(80px); }
+.dot-out-4 { transform: rotate(90deg) translateX(80px); }
+.dot-out-5 { transform: rotate(120deg) translateX(80px); }
+.dot-out-6 { transform: rotate(150deg) translateX(80px); }
+.dot-out-7 { transform: rotate(180deg) translateX(80px); }
+.dot-out-8 { transform: rotate(210deg) translateX(80px); }
+.dot-out-9 { transform: rotate(240deg) translateX(80px); }
+.dot-out-10 { transform: rotate(270deg) translateX(80px); }
+.dot-out-11 { transform: rotate(300deg) translateX(80px); }
+.dot-out-12 { transform: rotate(330deg) translateX(80px); }
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
@@ -407,10 +617,6 @@ button:hover {
     
     .glass-panel {
         padding: 1.2rem;
-    }
-    
-    .text {
-        font-size: 3rem;
     }
 }
 
@@ -436,9 +642,5 @@ button:hover {
     
     button {
         padding: 0.6rem 1.2rem;
-    }
-    
-    .text {
-        font-size: 2.5rem;
     }
 }

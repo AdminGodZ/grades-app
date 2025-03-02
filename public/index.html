@@ -10,17 +10,59 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Loading Screen with AdminGod Animation -->
+    <!-- Loading Screen with Purple Geometric Loader -->
     <div id="loading-screen">
-        <div class="container-animation">
-            <div class="text" id="adminGodText">Grades Tracker</div>
-            <div class="underline" id="underline"></div>
-            <div class="star" id="star">
-                <div class="star-inner"></div>
+        <div class="loader-container" id="loaderContainer">
+            <div class="hexagon hex-1"></div>
+            <div class="hexagon hex-2"></div>
+            <div class="hexagon hex-3"></div>
+            
+            <!-- Main circle of dots -->
+            <div class="circle-container">
+                <div class="circle dot-1 dot-pulse"></div>
+                <div class="circle dot-2"></div>
+                <div class="circle dot-3 dot-pulse"></div>
+                <div class="circle dot-4"></div>
+                <div class="circle dot-5 dot-pulse"></div>
+                <div class="circle dot-6"></div>
+                <div class="circle dot-7 dot-pulse"></div>
+                <div class="circle dot-8"></div>
             </div>
-            <div class="star-trail" id="starTrail"></div>
-            <div class="glow" id="glow"></div>
-            <div class="evil-particles" id="particles"></div>
+            
+            <!-- Inner circle of dots -->
+            <div class="circle-container-inner">
+                <div class="circle circle-inner dot-in-1"></div>
+                <div class="circle circle-inner dot-in-2"></div>
+                <div class="circle circle-inner dot-in-3"></div>
+                <div class="circle circle-inner dot-in-4"></div>
+                <div class="circle circle-inner dot-in-5"></div>
+                <div class="circle circle-inner dot-in-6"></div>
+            </div>
+            
+            <!-- Outer circle of dots -->
+            <div class="circle-container-outer">
+                <div class="circle circle-outer dot-out-1"></div>
+                <div class="circle circle-outer dot-out-2"></div>
+                <div class="circle circle-outer dot-out-3"></div>
+                <div class="circle circle-outer dot-out-4"></div>
+                <div class="circle circle-outer dot-out-5"></div>
+                <div class="circle circle-outer dot-out-6"></div>
+                <div class="circle circle-outer dot-out-7"></div>
+                <div class="circle circle-outer dot-out-8"></div>
+                <div class="circle circle-outer dot-out-9"></div>
+                <div class="circle circle-outer dot-out-10"></div>
+                <div class="circle circle-outer dot-out-11"></div>
+                <div class="circle circle-outer dot-out-12"></div>
+            </div>
+            
+            <!-- Dot trails container (will be populated by JS) -->
+            <div id="dotTrailsContainer"></div>
+            
+            <svg class="progress-ring" width="100" height="100">
+                <circle id="progressRing" cx="50" cy="50" r="40"></circle>
+            </svg>
+            
+            <div class="loader-text" id="loaderText">Loading</div>
         </div>
     </div>
 

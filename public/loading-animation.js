@@ -1,189 +1,174 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const loaderContainer = document.getElementById('loaderContainer');
     const loadingScreen = document.getElementById('loading-screen');
+    const progressRing = document.getElementById('progressRing');
+    const loaderText = document.getElementById('loaderText');
+    const circles = document.querySelectorAll('.circle');
+    const mainCircles = document.querySelectorAll('.circle-container > .circle');
+    const innerCircles = document.querySelectorAll('.circle-inner');
+    const outerCircles = document.querySelectorAll('.circle-outer');
+    const dotTrailsContainer = document.getElementById('dotTrailsContainer');
     
-    // Set up AdminGod loading animation
-    const text = document.getElementById('adminGodText');
-    const star = document.getElementById('star');
-    const underline = document.getElementById('underline');
-    const glow = document.getElementById('glow');
-    const particles = document.getElementById('particles');
-    const starTrail = document.getElementById('starTrail');
-    
-    // Trail effect variables
-    let trailParticles = [];
-    
-    // Create particles
-    for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.width = `${Math.random() * 6 + 2}px`;
-        particle.style.height = particle.style.width;
-        particles.appendChild(particle);
-    }
-
     // Animation timeline
-    setTimeout(() => {
-        // Fade in text
-        text.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
-        text.style.opacity = '1';
-        text.style.transform = 'scale(1)';
-        
-        // Start star animation
-        setTimeout(() => {
-            // Position star
-            const textRect = text.getBoundingClientRect();
-            star.style.opacity = '1';
-            // Position star above the text
-            star.style.left = `${textRect.left + textRect.width / 2}px`;
-            star.style.top = `-50px`;
-            
-            // Rotate star
-            star.querySelector('.star-inner').style.animation = 'rotateStar 0.8s linear infinite';
-            
-            // Trajectory variables
-            let starPosY = -50;
-            let starPosX = textRect.left + textRect.width / 2;
-            const targetY = textRect.top + textRect.height / 2;
-            const targetX = starPosX; // For vertical drop
-            const moveSpeedY = 6; // Vertical speed
-            const moveSpeedX = 0.5; // Small horizontal drift
-            
-            // Create trail particles
-            const maxTrailParticles = 20;
-            
-            for (let i = 0; i < maxTrailParticles; i++) {
-                const trailParticle = document.createElement('div');
-                trailParticle.classList.add('trail-particle');
-                starTrail.appendChild(trailParticle);
-                trailParticles.push({
-                    element: trailParticle,
-                    opacity: 0,
-                    size: Math.random() * 15 + 5,
-                    x: 0,
-                    y: 0
-                });
-            }
-            
-            // Move star towards text like a meteor
-            const moveStarFrame = () => {
-                starPosY += moveSpeedY;
-                starPosX -= moveSpeedX;
-                star.style.top = `${starPosY}px`;
-                star.style.left = `${starPosX}px`;
-                
-                // Create trail effect
-                for (let i = 0; i < trailParticles.length; i++) {
-                    const particle = trailParticles[i];
-                    if (particle.opacity <= 0) {
-                        // Reuse particle at current star position
-                        particle.x = starPosX;
-                        particle.y = starPosY;
-                        particle.opacity = 0.8 - (i * 0.03);
-                        particle.element.style.width = `${particle.size}px`;
-                        particle.element.style.height = `${particle.size}px`;
-                        particle.element.style.left = `${particle.x}px`;
-                        particle.element.style.top = `${particle.y}px`;
-                        particle.element.style.opacity = particle.opacity;
-                    } else {
-                        // Fade out existing particles
-                        particle.opacity -= 0.05;
-                        particle.element.style.opacity = particle.opacity;
-                    }
-                }
-                
-                // Check for collision
-                if (starPosY >= targetY) {
-                    // Collision effects
-                    starExplosion();
-                    return;
-                }
-                
-                requestAnimationFrame(moveStarFrame);
-            };
-            
-            requestAnimationFrame(moveStarFrame);
-        }, 1200);
-        
-    }, 500);
+    const animationDuration = 6000; // 6 seconds
+    let timeElapsed = 0;
+    let animationInterval;
     
-    // Star explosion and text glow effect
-    function starExplosion() {
-        // Hide star and trail
-        star.style.opacity = '0';
-        star.querySelector('.star-inner').style.animation = 'none';
+    // Start the animation
+    startAnimation();
+    
+    // Animation functions
+    function startAnimation() {
+        timeElapsed = 0;
         
-        // Clear all trail particles
-        trailParticles.forEach(particle => {
-            particle.element.style.opacity = '0';
-        });
+        // Reset animation states
+        progressRing.style.strokeDashoffset = '251.2';
+        loaderText.style.opacity = '0';
+        loaderText.style.transform = 'translateY(20px)';
         
-        // Text glow effect
-        text.style.textShadow = `
-            0 0 10px #9900ff,
-            0 0 20px #9900ff,
-            0 0 30px #9900ff,
-            0 0 40px #9900ff,
-            0 0 70px #9900ff
-        `;
+        // Fade in the container
+        loaderContainer.style.animation = 'fadeIn 0.8s ease-in forwards';
         
-        // Activate glow
-        glow.style.opacity = '1';
-        glow.style.animation = 'pulseGlow 1s ease-in-out infinite';
-        
-        // Animate particles
-        const allParticles = document.querySelectorAll('.particle');
-        const textRect = text.getBoundingClientRect();
-        const centerX = textRect.left + textRect.width / 2;
-        const centerY = textRect.top + textRect.height / 2;
-        
-        allParticles.forEach((particle, index) => {
-            // Random position around text
-            const angle = Math.random() * Math.PI * 2;
-            const initialDistance = Math.random() * 20 + 10;
-            const finalDistance = Math.random() * 150 + 100;
-            const duration = Math.random() * 1500 + 1000;
-            
-            const startX = centerX + Math.cos(angle) * initialDistance;
-            const startY = centerY + Math.sin(angle) * initialDistance;
-            const endX = centerX + Math.cos(angle) * finalDistance;
-            const endY = centerY + Math.sin(angle) * finalDistance;
-            
-            // Set initial position
-            particle.style.left = `${startX}px`;
-            particle.style.top = `${startY}px`;
-            particle.style.opacity = '1';
-            
-            // Animate to final position
-            setTimeout(() => {
-                particle.style.transition = `left ${duration}ms ease-out, top ${duration}ms ease-out, opacity ${duration}ms ease-out`;
-                particle.style.left = `${endX}px`;
-                particle.style.top = `${endY}px`;
-                particle.style.opacity = '0';
-            }, 10);
-        });
-        
-        // Show underline
+        // Show loader text after a delay
         setTimeout(() => {
-            const textWidth = text.offsetWidth;
-            underline.style.transition = 'width 0.8s ease-in-out';
-            underline.style.width = `${textWidth + 20}px`;
-            
-            // Final fade out
+            loaderText.style.opacity = '1';
+            loaderText.style.transform = 'translateY(0)';
+        }, 800);
+        
+        // Animate main circle dots sequentially
+        mainCircles.forEach((circle, index) => {
             setTimeout(() => {
-                const elements = [text, underline, glow];
-                elements.forEach(el => {
-                    el.style.transition = 'opacity 1.5s ease-out';
-                    el.style.opacity = '0';
-                });
-                
-                // Complete the loading animation
-                setTimeout(() => {
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500);
-                }, 1500);
-            }, 2000);
-        }, 400);
+                circle.style.transition = 'opacity 0.4s ease-in-out';
+                circle.style.opacity = '1';
+            }, 1000 + (index * 100));
+        });
+        
+        // Animate inner circle dots with a different sequence
+        innerCircles.forEach((circle, index) => {
+            setTimeout(() => {
+                circle.style.transition = 'opacity 0.4s ease-in-out';
+                circle.style.opacity = '0.8';
+            }, 1400 + (index * 80));
+        });
+        
+        // Animate outer circle dots with a wave effect
+        outerCircles.forEach((circle, index) => {
+            setTimeout(() => {
+                circle.style.transition = 'opacity 0.4s ease-in-out';
+                circle.style.opacity = '0.6';
+            }, 1600 + (index * 60));
+        });
+        
+        // Animate progress ring
+        setTimeout(() => {
+            animateProgressRing();
+        }, 1800);
+        
+        // End animation sequence
+        setTimeout(() => {
+            endAnimation();
+        }, animationDuration);
     }
+    
+    function animateProgressRing() {
+        const circumference = 2 * Math.PI * 40;
+        let progress = 0;
+        const totalSteps = 100;
+        const stepDuration = (animationDuration - 2000) / totalSteps;
+        
+        animationInterval = setInterval(() => {
+            progress += 1;
+            timeElapsed += stepDuration;
+            
+            const dashoffset = circumference - (progress / 100) * circumference;
+            progressRing.style.strokeDashoffset = dashoffset;
+            
+            if (progress >= 100) {
+                clearInterval(animationInterval);
+            }
+        }, stepDuration);
+    }
+    
+    function endAnimation() {
+        // Hide outer dots first
+        outerCircles.forEach((circle, index) => {
+            setTimeout(() => {
+                circle.style.opacity = '0';
+            }, index * 40);
+        });
+        
+        // Then hide inner dots
+        setTimeout(() => {
+            innerCircles.forEach((circle, index) => {
+                setTimeout(() => {
+                    circle.style.opacity = '0';
+                }, index * 50);
+            });
+        }, 300);
+        
+        // Finally hide main dots in reverse order
+        setTimeout(() => {
+            mainCircles.forEach((circle, index) => {
+                setTimeout(() => {
+                    circle.style.opacity = '0';
+                }, (mainCircles.length - index) * 60);
+            });
+        }, 600);
+        
+        // Hide text
+        setTimeout(() => {
+            loaderText.style.opacity = '0';
+            loaderText.style.transform = 'translateY(20px)';
+        }, 300);
+        
+        // Fade out the container
+        setTimeout(() => {
+            loaderContainer.style.animation = 'fadeOut 0.8s ease-out forwards';
+            
+            // Hide the loading screen completely
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 800);
+        }, 1200);
+    }
+    
+    // Add subtle dot trail effect for main circle dots
+    function createDotTrails() {
+        mainCircles.forEach((dot, index) => {
+            if (index % 2 === 0) { // Only for alternating dots
+                const trailCount = 3;
+                for (let i = 0; i < trailCount; i++) {
+                    const trail = document.createElement('div');
+                    trail.classList.add('dot-trail');
+                    dotTrailsContainer.appendChild(trail);
+                    
+                    // Position trail relative to its parent dot
+                    const dotRect = dot.getBoundingClientRect();
+                    const containerRect = loaderContainer.getBoundingClientRect();
+                    
+                    const relX = dotRect.left - containerRect.left + dot.offsetWidth / 2;
+                    const relY = dotRect.top - containerRect.top + dot.offsetHeight / 2;
+                    
+                    trail.style.left = `${relX}px`;
+                    trail.style.top = `${relY}px`;
+                    trail.style.opacity = 0.7 - (i * 0.2);
+                    
+                    // Clean up trails after animation
+                    setTimeout(() => {
+                        trail.remove();
+                    }, 300);
+                }
+            }
+        });
+    }
+    
+    // Periodically create trail effects when animation is running
+    setInterval(() => {
+        if (timeElapsed > 0 && timeElapsed < animationDuration) {
+            createDotTrails();
+        }
+    }, 400);
 });
