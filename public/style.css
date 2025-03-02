@@ -169,7 +169,7 @@ button:hover {
     min-width: 60%;
 }
 
-/* Delete button with border animation */
+/* Delete button with scale effect on hover */
 .delete-btn {
     background: #ef4444;
     padding: 0.5rem;
@@ -178,83 +178,15 @@ button:hover {
     width: auto;
     margin-left: 1rem;
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+    transition: transform 0.2s ease, background 0.3s;
 }
 
-.delete-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 3px;
-    background: transparent;
-    opacity: 0;
-    z-index: -1;
+.delete-btn:hover {
+    transform: scale(1.08);
+    background: #dc2626;
 }
 
-.delete-btn:hover::before {
-    opacity: 1;
-    animation: border-dance 0.8s linear forwards;
-    box-shadow: 0 0 8px 1px #9900ff;
-}
-
-@keyframes border-dance {
-    0% {
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 3px;
-        border-top: 2px solid #9900ff;
-        border-left: 0;
-        border-bottom: 0;
-        border-right: 0;
-    }
-    25% {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        border-top: 2px solid #9900ff;
-        border-right: 0;
-        border-bottom: 0;
-        border-left: 0;
-    }
-    50% {
-        top: 0;
-        left: calc(100% - 3px);
-        width: 3px;
-        height: 100%;
-        border-right: 2px solid #9900ff;
-        border-top: 0;
-        border-bottom: 0;
-        border-left: 0;
-    }
-    75% {
-        top: calc(100% - 3px);
-        left: 0;
-        width: 100%;
-        height: 3px;
-        border-bottom: 2px solid #9900ff;
-        border-left: 0;
-        border-top: 0;
-        border-right: 0;
-    }
-    100% {
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 100%;
-        border-left: 2px solid #9900ff;
-        border-top: 0;
-        border-right: 0;
-        border-bottom: 0;
-    }
-}
-
-/* Same animation for subject delete button */
+/* Same scale effect for subject delete button */
 .delete-subject-btn {
     background: #ef4444;
     padding: 0.4rem 0.75rem;
@@ -263,27 +195,12 @@ button:hover {
     width: auto;
     margin-left: 1rem;
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+    transition: transform 0.2s ease, background 0.3s;
 }
 
-.delete-subject-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 3px;
-    background: transparent;
-    opacity: 0;
-    z-index: -1;
-}
-
-.delete-subject-btn:hover::before {
-    opacity: 1;
-    animation: border-dance 0.8s linear forwards;
-    box-shadow: 0 0 8px 1px #9900ff;
+.delete-subject-btn:hover {
+    transform: scale(1.08);
+    background: #dc2626;
 }
 
 .empty-message {
