@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Function to create a chart for grade trends
+    // Function to create a chart for grade trends - Updated to show sequential grades
     function createGradeChart(grades) {
         // Get the canvas element
         const ctx = document.getElementById('grade-chart').getContext('2d');
@@ -293,10 +293,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         
-        // Sort each subject's grades by date
+        // Sort each subject's grades by date (oldest first)
         subjectsMap.forEach((grades, subject) => {
             grades.sort((a, b) => a.date - b.date);
         });
+        
+        // Find the maximum number of grades for any subject (for x-axis scaling)
+        let maxGradeCount = 0;
+        subjectsMap.forEach((grades) => {
+            maxGradeCount = Math.max(maxGradeCount, grades.length);
+        });
+        
+        // Create labels for x-axis (1, 2, 3, etc.)
+        const xLabels = Array.from({length: maxGradeCount}, (_, i) => `Grade ${i+1}`);
         
         // Prepare datasets for chart
         const datasets = [];
@@ -329,27 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         
-        // Get all dates from all subjects
-        let allDates = [];
-        subjectsMap.forEach((grades) => {
-            allDates = allDates.concat(grades.map(g => g.date));
-        });
-        
-        // Sort dates and format for labels
-        allDates.sort((a, b) => a - b);
-        
-        // Remove duplicate dates
-        const uniqueDates = [];
-        const dateStrings = new Set();
-        
-        allDates.forEach(date => {
-            const dateString = date.toLocaleDateString();
-            if (!dateStrings.has(dateString)) {
-                dateStrings.add(dateString);
-                uniqueDates.push(date);
-            }
-        });
-        
         // If we already have a chart, destroy it
         if (gradeChart) {
             gradeChart.destroy();
@@ -359,9 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gradeChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: uniqueDates.map(date => 
-                    date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
-                ),
+                labels: xLabels,
                 datasets: datasets
             },
             options: {
@@ -404,7 +390,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         borderColor: 'rgba(186, 85, 255, 0.5)',
                         borderWidth: 1,
                         padding: 10,
-                        displayColors: true
+                        displayColors: true,
+                        callbacks: {
+                            title: function(context) {
+                                const index = context[0].dataIndex;
+                                return `Grade ${index + 1}`;
+                            },
+                            label: function(context) {
+                                const subject = context.dataset.label;
+                                const value = context.parsed.y;
+                                return `${subject}: ${value}`;
+                            },
+                            afterLabel: function(context) {
+                                const dataset = context.dataset;
+                                const currentValue = context.parsed.y;
+                                const dataIndex = context.dataIndex;
+                                
+                                // If this is not the first grade, calculate improvement
+                                if (dataIndex > 0) {
+                                    const previousValue = dataset.data[dataIndex - 1];
+                                    const difference = (currentValue - previousValue).toFixed(1);
+                                    const sign = difference > 0 ? '+' : '';
+                                    return `Change: ${sign}${difference}`;
+                                }
+                                return '';
+                            }
+                        }
                     }
                 },
                 animation: {
