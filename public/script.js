@@ -113,9 +113,18 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (gradeValue >= 4) gradeClass = 'grade-satisfactory';
             else gradeClass = 'grade-failing';
             
+            // Format date for display
+            const gradeDate = new Date(grade.date);
+            const formattedDate = gradeDate.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
             gradeItem.innerHTML = `
-                <div>
-                    <strong>${grade.subject}</strong>: <span class="${gradeClass}">${grade.grade}</span>
+                <div class="grade-info">
+                    <div><strong>${grade.subject}</strong>: <span class="${gradeClass}">${grade.grade}</span></div>
+                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 0.25rem;">${formattedDate}</div>
                 </div>
                 <button class="delete-btn" data-id="${grade.id}">Delete</button>
             `;

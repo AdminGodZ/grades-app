@@ -14,6 +14,7 @@ body {
     color: #e2e8f0;
     position: relative;
     overflow: hidden;
+    padding: 1rem;
 }
 
 #background-canvas {
@@ -26,9 +27,10 @@ body {
 }
 
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 800px;
     z-index: 1;
+    padding: 1rem;
 }
 
 h1 {
@@ -36,6 +38,7 @@ h1 {
     margin-bottom: 2rem;
     color: #ffffff;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    font-size: 2.5rem;
 }
 
 .glass-panel {
@@ -57,6 +60,7 @@ h1 {
 h2 {
     margin-bottom: 1.5rem;
     color: #ffffff;
+    font-size: 1.8rem;
 }
 
 .form-group {
@@ -66,6 +70,7 @@ h2 {
 label {
     display: block;
     margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
 input, select {
@@ -76,6 +81,7 @@ input, select {
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     margin-bottom: 1rem;
+    font-size: 1rem;
 }
 
 select {
@@ -99,6 +105,8 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
+    font-size: 1rem;
+    width: 100%;
 }
 
 button:hover {
@@ -120,6 +128,12 @@ button:hover {
     border-radius: 5px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: transform 0.2s ease;
+    flex-wrap: wrap;
+}
+
+.grade-info {
+    flex: 1;
+    min-width: 60%;
 }
 
 .grade-item:hover {
@@ -131,6 +145,8 @@ button:hover {
     padding: 0.5rem;
     border-radius: 5px;
     font-size: 0.9rem;
+    width: auto;
+    margin-left: 1rem;
 }
 
 .delete-btn:hover {
@@ -172,4 +188,49 @@ button:hover {
 .grade-failing {
     color: #f87171;
     font-weight: bold;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .glass-panel {
+        padding: 1.5rem;
+    }
+    
+    .container {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .glass-panel {
+        padding: 1rem;
+    }
+    
+    .grade-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .delete-btn {
+        margin-left: 0;
+        margin-top: 0.75rem;
+        align-self: flex-end;
+    }
+    
+    button {
+        padding: 0.6rem 1.2rem;
+    }
 }
