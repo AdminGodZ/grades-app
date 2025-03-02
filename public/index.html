@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades Tracker</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="background-canvas"></div>
+    
+    <div class="container">
+        <h1>Grades Tracker</h1>
+        
+        <div class="glass-panel">
+            <h2>Add New Grade</h2>
+            <p class="grade-scale-info">Grading scale: 1-6, where 6 is the best grade</p>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <select id="subject">
+                    <option value="">Select a subject</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="History">History</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Art">Art</option>
+                    <option value="Music">Music</option>
+                    <option value="Physical Education">Physical Education</option>
+                    <option value="Foreign Language">Foreign Language</option>
+                    <option value="Economics">Economics</option>
+                    <option value="Geography">Geography</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="grade">Grade:</label>
+                <input type="number" id="grade" placeholder="Enter grade (1-6, where 6 is best)" min="1" max="6" step="0.1">
+            </div>
+            <button id="add-grade">Add Grade</button>
+        </div>
+        
+        <div class="glass-panel">
+            <h2>Your Grades</h2>
+            <div id="grades-list">
+                <!-- Grades will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/background.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>

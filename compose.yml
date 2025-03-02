@@ -1,0 +1,21 @@
+services:
+  grades-app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: grades-app
+    restart: unless-stopped
+    networks:
+      - proxy
+    ports:
+      - "4000:3000"
+    volumes:
+      - ./data:/app/data
+    develop:
+      watch:
+        - path: .
+          action: rebuild
+
+networks:
+  proxy:
+    external: true
