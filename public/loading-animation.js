@@ -1,96 +1,189 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
-    const loadingAnimation = document.getElementById('loading-animation');
     
-    // SVG for an evil transformer-like face that builds itself
-    const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-        <defs>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-            </filter>
-            <linearGradient id="eyeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff0000"/>
-                <stop offset="100%" stop-color="#ff7700"/>
-            </linearGradient>
-            <linearGradient id="metalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#333333"/>
-                <stop offset="50%" stop-color="#666666"/>
-                <stop offset="100%" stop-color="#222222"/>
-            </linearGradient>
-        </defs>
-        
-        <!-- Face base -->
-        <path class="face-part" d="M100,20 L60,50 L60,150 L100,180 L140,150 L140,50 Z" fill="url(#metalGradient)" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0s" fill="freeze"/>
-        </path>
-        
-        <!-- Left eye socket -->
-        <path class="face-part" d="M70,70 L90,60 L90,80 L70,90 Z" fill="#111111" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/>
-        </path>
-        
-        <!-- Right eye socket -->
-        <path class="face-part" d="M130,70 L110,60 L110,80 L130,90 Z" fill="#111111" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/>
-        </path>
-        
-        <!-- Left eye -->
-        <circle class="face-part" cx="80" cy="75" r="6" fill="url(#eyeGlow)" filter="url(#glow)" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.9s" fill="freeze"/>
-            <animate attributeName="r" from="0" to="6" dur="0.3s" begin="0.9s" fill="freeze"/>
-        </circle>
-        
-        <!-- Right eye -->
-        <circle class="face-part" cx="120" cy="75" r="6" fill="url(#eyeGlow)" filter="url(#glow)" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.9s" fill="freeze"/>
-            <animate attributeName="r" from="0" to="6" dur="0.3s" begin="0.9s" fill="freeze"/>
-        </circle>
-        
-        <!-- Mouth parts - evil grin -->
-        <path class="face-part" d="M80,120 L90,110 L110,110 L120,120 L110,130 L90,130 Z" fill="#111111" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="1.2s" fill="freeze"/>
-        </path>
-        
-        <!-- Teeth -->
-        <path class="face-part" d="M85,120 L88,115 L92,115 L95,120 L92,125 L88,125 Z" fill="#999999" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.7s" fill="freeze"/>
-        </path>
-        <path class="face-part" d="M105,120 L108,115 L112,115 L115,120 L112,125 L108,125 Z" fill="#999999" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.7s" fill="freeze"/>
-        </path>
-        
-        <!-- Helmet details -->
-        <path class="face-part" d="M60,50 L40,60 L60,70" stroke="#8a2be2" stroke-width="2" fill="none" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="2s" fill="freeze"/>
-        </path>
-        <path class="face-part" d="M140,50 L160,60 L140,70" stroke="#8a2be2" stroke-width="2" fill="none" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="2s" fill="freeze"/>
-        </path>
-        
-        <!-- Final glowing effect -->
-        <path class="face-part" d="M100,20 L60,50 L60,150 L100,180 L140,150 L140,50 Z" stroke="#8a2be2" stroke-width="2" fill="none" opacity="0">
-            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.4s" fill="freeze"/>
-            <animate attributeName="stroke-width" from="0" to="3" dur="0.5s" begin="2.4s" fill="freeze"/>
-        </path>
-        
-        <!-- Evil laugh text -->
-        <text x="100" y="160" text-anchor="middle" fill="#8a2be2" font-family="Arial" font-weight="bold" font-size="12" opacity="0">
-            ANALYZING YOUR GRADES
-            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.9s" fill="freeze"/>
-        </text>
-    </svg>
-    `;
+    // Set up AdminGod loading animation
+    const text = document.getElementById('adminGodText');
+    const star = document.getElementById('star');
+    const underline = document.getElementById('underline');
+    const glow = document.getElementById('glow');
+    const particles = document.getElementById('particles');
+    const starTrail = document.getElementById('starTrail');
     
-    // Set the SVG content
-    loadingAnimation.innerHTML = svg;
+    // Trail effect variables
+    let trailParticles = [];
     
-    // Hide loading screen after 4 seconds
+    // Create particles
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.width = `${Math.random() * 6 + 2}px`;
+        particle.style.height = particle.style.width;
+        particles.appendChild(particle);
+    }
+
+    // Animation timeline
     setTimeout(() => {
-        loadingScreen.style.opacity = '0';
+        // Fade in text
+        text.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
+        text.style.opacity = '1';
+        text.style.transform = 'scale(1)';
+        
+        // Start star animation
         setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }, 4000);
+            // Position star
+            const textRect = text.getBoundingClientRect();
+            star.style.opacity = '1';
+            // Position star above the text
+            star.style.left = `${textRect.left + textRect.width / 2}px`;
+            star.style.top = `-50px`;
+            
+            // Rotate star
+            star.querySelector('.star-inner').style.animation = 'rotateStar 0.8s linear infinite';
+            
+            // Trajectory variables
+            let starPosY = -50;
+            let starPosX = textRect.left + textRect.width / 2;
+            const targetY = textRect.top + textRect.height / 2;
+            const targetX = starPosX; // For vertical drop
+            const moveSpeedY = 6; // Vertical speed
+            const moveSpeedX = 0.5; // Small horizontal drift
+            
+            // Create trail particles
+            const maxTrailParticles = 20;
+            
+            for (let i = 0; i < maxTrailParticles; i++) {
+                const trailParticle = document.createElement('div');
+                trailParticle.classList.add('trail-particle');
+                starTrail.appendChild(trailParticle);
+                trailParticles.push({
+                    element: trailParticle,
+                    opacity: 0,
+                    size: Math.random() * 15 + 5,
+                    x: 0,
+                    y: 0
+                });
+            }
+            
+            // Move star towards text like a meteor
+            const moveStarFrame = () => {
+                starPosY += moveSpeedY;
+                starPosX -= moveSpeedX;
+                star.style.top = `${starPosY}px`;
+                star.style.left = `${starPosX}px`;
+                
+                // Create trail effect
+                for (let i = 0; i < trailParticles.length; i++) {
+                    const particle = trailParticles[i];
+                    if (particle.opacity <= 0) {
+                        // Reuse particle at current star position
+                        particle.x = starPosX;
+                        particle.y = starPosY;
+                        particle.opacity = 0.8 - (i * 0.03);
+                        particle.element.style.width = `${particle.size}px`;
+                        particle.element.style.height = `${particle.size}px`;
+                        particle.element.style.left = `${particle.x}px`;
+                        particle.element.style.top = `${particle.y}px`;
+                        particle.element.style.opacity = particle.opacity;
+                    } else {
+                        // Fade out existing particles
+                        particle.opacity -= 0.05;
+                        particle.element.style.opacity = particle.opacity;
+                    }
+                }
+                
+                // Check for collision
+                if (starPosY >= targetY) {
+                    // Collision effects
+                    starExplosion();
+                    return;
+                }
+                
+                requestAnimationFrame(moveStarFrame);
+            };
+            
+            requestAnimationFrame(moveStarFrame);
+        }, 1200);
+        
+    }, 500);
+    
+    // Star explosion and text glow effect
+    function starExplosion() {
+        // Hide star and trail
+        star.style.opacity = '0';
+        star.querySelector('.star-inner').style.animation = 'none';
+        
+        // Clear all trail particles
+        trailParticles.forEach(particle => {
+            particle.element.style.opacity = '0';
+        });
+        
+        // Text glow effect
+        text.style.textShadow = `
+            0 0 10px #9900ff,
+            0 0 20px #9900ff,
+            0 0 30px #9900ff,
+            0 0 40px #9900ff,
+            0 0 70px #9900ff
+        `;
+        
+        // Activate glow
+        glow.style.opacity = '1';
+        glow.style.animation = 'pulseGlow 1s ease-in-out infinite';
+        
+        // Animate particles
+        const allParticles = document.querySelectorAll('.particle');
+        const textRect = text.getBoundingClientRect();
+        const centerX = textRect.left + textRect.width / 2;
+        const centerY = textRect.top + textRect.height / 2;
+        
+        allParticles.forEach((particle, index) => {
+            // Random position around text
+            const angle = Math.random() * Math.PI * 2;
+            const initialDistance = Math.random() * 20 + 10;
+            const finalDistance = Math.random() * 150 + 100;
+            const duration = Math.random() * 1500 + 1000;
+            
+            const startX = centerX + Math.cos(angle) * initialDistance;
+            const startY = centerY + Math.sin(angle) * initialDistance;
+            const endX = centerX + Math.cos(angle) * finalDistance;
+            const endY = centerY + Math.sin(angle) * finalDistance;
+            
+            // Set initial position
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+            particle.style.opacity = '1';
+            
+            // Animate to final position
+            setTimeout(() => {
+                particle.style.transition = `left ${duration}ms ease-out, top ${duration}ms ease-out, opacity ${duration}ms ease-out`;
+                particle.style.left = `${endX}px`;
+                particle.style.top = `${endY}px`;
+                particle.style.opacity = '0';
+            }, 10);
+        });
+        
+        // Show underline
+        setTimeout(() => {
+            const textWidth = text.offsetWidth;
+            underline.style.transition = 'width 0.8s ease-in-out';
+            underline.style.width = `${textWidth + 20}px`;
+            
+            // Final fade out
+            setTimeout(() => {
+                const elements = [text, underline, glow];
+                elements.forEach(el => {
+                    el.style.transition = 'opacity 1.5s ease-out';
+                    el.style.opacity = '0';
+                });
+                
+                // Complete the loading animation
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }, 2000);
+        }, 400);
+    }
 });

@@ -43,6 +43,7 @@ body {
     grid-auto-rows: minmax(min-content, max-content);
     gap: 1.5rem;
     align-items: start;
+    margin-bottom: 3rem; /* Added margin to bottom */
 }
 
 .dashboard-header {
@@ -135,7 +136,7 @@ button {
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    transition: background 0.3s;
     font-size: 1rem;
     width: 100%;
     box-shadow: 0 0 10px rgba(186, 85, 255, 0.5); /* Purple glow */
@@ -143,8 +144,6 @@ button {
 
 button:hover {
     background: #9b4dff; /* Lighter purple */
-    box-shadow: 0 0 20px rgba(186, 85, 255, 0.8); /* Enhanced glow on hover */
-    transform: translateY(-2px);
 }
 
 /* Grades List */
@@ -162,17 +161,12 @@ button:hover {
     border-radius: 5px;
     border: 1px solid rgba(186, 85, 255, 0.3);
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.2); /* Subtle glow */
-    transition: transform 0.2s ease;
     flex-wrap: wrap;
 }
 
 .grade-info {
     flex: 1;
     min-width: 60%;
-}
-
-.grade-item:hover {
-    box-shadow: 0 0 12px rgba(186, 85, 255, 0.4); /* Enhanced glow on hover */
 }
 
 .delete-btn {
@@ -185,10 +179,7 @@ button:hover {
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
 }
 
-.delete-btn:hover {
-    background: #dc2626;
-    box-shadow: 0 0 12px rgba(186, 85, 255, 0.5);
-}
+/* Removed hover effect for delete buttons */
 
 .empty-message {
     text-align: center;
@@ -243,11 +234,6 @@ button:hover {
     border: 1px solid rgba(186, 85, 255, 0.3);
     margin-bottom: 0.75rem;
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.2);
-    transition: box-shadow 0.2s ease;
-}
-
-.subject-item:hover {
-    box-shadow: 0 0 12px rgba(186, 85, 255, 0.4);
 }
 
 .subject-info {
@@ -264,10 +250,7 @@ button:hover {
     box-shadow: 0 0 8px rgba(186, 85, 255, 0.3);
 }
 
-.delete-subject-btn:hover {
-    background: #dc2626;
-    box-shadow: 0 0 12px rgba(186, 85, 255, 0.5);
-}
+/* Removed hover effect for delete buttons */
 
 /* Chart container */
 .chart-container {
@@ -283,7 +266,7 @@ button:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #0f0720;
+    background-color: #0a0010;
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -292,9 +275,118 @@ button:hover {
     transition: opacity 0.5s ease;
 }
 
-#loading-animation {
-    width: 200px;
-    height: 200px;
+/* AdminGod Animation Styles */
+.container-animation {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    position: absolute;
+    font-size: 5rem;
+    font-weight: bold;
+    color: #9900ff;
+    opacity: 0;
+    text-shadow: 0 0 10px rgba(153, 0, 255, 0.5);
+    letter-spacing: 2px;
+    z-index: 10;
+    transform: scale(0.8);
+    transition: text-shadow 0.3s ease;
+}
+
+.star {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    left: -100px;
+    top: 50%;
+    z-index: 5;
+}
+
+.star-inner {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #b035ff;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    filter: blur(2px);
+    box-shadow: 
+        0 0 10px 2px #9900ff,
+        0 0 20px 5px #bf00ff,
+        0 0 30px 10px #da70d6;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.star-trail {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+}
+
+.trail-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(153, 0, 255, 0.6);
+    filter: blur(4px);
+    opacity: 0;
+}
+
+.underline {
+    position: absolute;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(153, 0, 255, 0), #9900ff, rgba(153, 0, 255, 0));
+    width: 0;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px 2px #9900ff;
+    z-index: 5;
+}
+
+.glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(153, 0, 255, 0.4) 0%, rgba(153, 0, 255, 0) 70%);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Evil style additions */
+.evil-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: #9900ff;
+    border-radius: 50%;
+    opacity: 0;
+    filter: blur(1px);
+    box-shadow: 0 0 6px 2px #9900ff;
+}
+
+@keyframes rotateStar {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+    0% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+    100% { opacity: 0.3; transform: scale(0.9); }
 }
 
 /* Media Queries for Responsiveness */
@@ -315,6 +407,10 @@ button:hover {
     
     .glass-panel {
         padding: 1.2rem;
+    }
+    
+    .text {
+        font-size: 3rem;
     }
 }
 
@@ -340,5 +436,9 @@ button:hover {
     
     button {
         padding: 0.6rem 1.2rem;
+    }
+    
+    .text {
+        font-size: 2.5rem;
     }
 }
