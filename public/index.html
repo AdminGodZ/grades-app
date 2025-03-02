@@ -19,20 +19,7 @@
                 <label for="subject">Subject:</label>
                 <select id="subject">
                     <option value="">Select a subject</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science</option>
-                    <option value="English">English</option>
-                    <option value="History">History</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Art">Art</option>
-                    <option value="Music">Music</option>
-                    <option value="Physical Education">Physical Education</option>
-                    <option value="Foreign Language">Foreign Language</option>
-                    <option value="Economics">Economics</option>
-                    <option value="Geography">Geography</option>
+                    <!-- Subjects will be loaded dynamically -->
                 </select>
             </div>
             <div class="form-group">
@@ -46,6 +33,22 @@
             <h2>Your Grades</h2>
             <div id="grades-list">
                 <!-- Grades will be populated here -->
+            </div>
+        </div>
+        
+        <div class="glass-panel">
+            <h2>Manage Subjects</h2>
+            <div class="form-group">
+                <label for="new-subject">Add New Subject:</label>
+                <input type="text" id="new-subject" placeholder="Enter subject name">
+            </div>
+            <button id="add-subject">Add Subject</button>
+            
+            <div class="subjects-list-container">
+                <h3>Current Subjects</h3>
+                <div id="subjects-list">
+                    <!-- Subjects will be populated here -->
+                </div>
             </div>
         </div>
     </div>

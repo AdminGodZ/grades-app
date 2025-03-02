@@ -4,9 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const gradeInput = document.getElementById('grade');
     const addButton = document.getElementById('add-grade');
     const gradesList = document.getElementById('grades-list');
+    const newSubjectInput = document.getElementById('new-subject');
+    const addSubjectButton = document.getElementById('add-subject');
+    const subjectsList = document.getElementById('subjects-list');
     
-    // Load grades when page loads
+    // Load grades and subjects when page loads
     loadGrades();
+    loadSubjects();
     
     // Add grade event listener
     addButton.addEventListener('click', () => {
@@ -32,6 +36,19 @@ document.addEventListener('DOMContentLoaded', () => {
         addGrade(subject, grade);
         subjectSelect.value = '';
         gradeInput.value = '';
+    });
+    
+    // Add subject event listener
+    addSubjectButton.addEventListener('click', () => {
+        const subject = newSubjectInput.value.trim();
+        
+        if (!subject) {
+            alert('Please enter a subject name');
+            return;
+        }
+        
+        addSubject(subject);
+        newSubjectInput.value = '';
     });
     
     // Function to load grades from API
@@ -137,6 +154,104 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', (e) => {
                 const id = e.target.getAttribute('data-id');
                 deleteGrade(id);
+            });
+        });
+    }
+    
+    // Load subjects from API
+    async function loadSubjects() {
+        try {
+            const response = await fetch('/api/subjects');
+            const subjects = await response.json();
+            
+            // Populate the subject dropdown
+            subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            
+            // Display subjects in the management section
+            displaySubjects(subjects);
+        } catch (error) {
+            console.error('Error loading subjects:', error);
+            alert('Failed to load subjects. Please try again.');
+        }
+    }
+    
+    // Add a new subject
+    async function addSubject(subject) {
+        try {
+            const response = await fetch('/api/subjects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ subject })
+            });
+            
+            if (response.ok) {
+                loadSubjects(); // Reload the subjects list
+            } else {
+                const error = await response.json();
+                alert(error.error || 'Failed to add subject');
+            }
+        } catch (error) {
+            console.error('Error adding subject:', error);
+            alert('Failed to add subject. Please try again.');
+        }
+    }
+    
+    // Delete a subject
+    async function deleteSubject(subject) {
+        try {
+            const response = await fetch(`/api/subjects/${encodeURIComponent(subject)}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                loadSubjects(); // Reload the subjects list
+            } else {
+                const error = await response.json();
+                alert(error.error || 'Failed to delete subject');
+            }
+        } catch (error) {
+            console.error('Error deleting subject:', error);
+            alert('Failed to delete subject. Please try again.');
+        }
+    }
+    
+    // Display subjects in the management section
+    function displaySubjects(subjects) {
+        subjectsList.innerHTML = '';
+        
+        if (subjects.length === 0) {
+            subjectsList.innerHTML = '<p class="empty-message">No subjects added yet.</p>';
+            return;
+        }
+        
+        // Sort subjects alphabetically
+        subjects.sort();
+        
+        subjects.forEach(subject => {
+            const subjectItem = document.createElement('div');
+            subjectItem.className = 'subject-item';
+            
+            subjectItem.innerHTML = `
+                <div class="subject-info">${subject}</div>
+                <button class="delete-subject-btn" data-subject="${subject}">Delete</button>
+            `;
+            
+            subjectsList.appendChild(subjectItem);
+        });
+        
+        // Add event listeners to delete buttons
+        document.querySelectorAll('.delete-subject-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const subject = e.target.getAttribute('data-subject');
+                deleteSubject(subject);
             });
         });
     }
