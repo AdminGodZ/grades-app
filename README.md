@@ -2,7 +2,7 @@
 
 A sleek, modern web application for tracking and visualizing academic grades with a neon purple aesthetic. This application helps students monitor their academic performance across different subjects, visualize grade trends over time, and manage their subject list.
 
-![Grades Tracker Screenshot](https://via.placeholder.com/800x450/0f0720/8a2be2?text=Grades+Tracker)
+![Grades Tracker Screenshot](grades_screenshot.png)
 
 ## Features
 
