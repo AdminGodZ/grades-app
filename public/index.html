@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grades Tracker</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/grade_analytics_logo.svg" type="image/svg+xml">
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div id="loading-animation"></div>
+    </div>
+
     <div id="background-canvas"></div>
     
     <div class="container">
-        <h1>Grades Tracker</h1>
+        <h1 class="dashboard-header">Grades Tracker</h1>
         
         <div class="glass-panel">
             <h2>Add New Grade</h2>
@@ -51,9 +59,18 @@
                 </div>
             </div>
         </div>
+        
+        <div class="glass-panel full-width">
+            <h2>Grade Trends</h2>
+            <p id="no-data-message" class="empty-message">Add grades to see trends.</p>
+            <div class="chart-container">
+                <canvas id="grade-chart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script src="/background.js"></script>
+    <script src="/loading-animation.js"></script>
     <script src="/script.js"></script>
 </body>
 </html>

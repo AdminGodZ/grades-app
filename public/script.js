@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const addSubjectButton = document.getElementById('add-subject');
     const subjectsList = document.getElementById('subjects-list');
     
+    // Chart variables
+    let gradeChart = null;
+    
     // Load grades and subjects when page loads
     loadGrades();
     loadSubjects();
@@ -57,6 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/grades');
             const grades = await response.json();
             displayGrades(grades);
+            
+            // Update the chart if grades exist
+            if (grades.length > 0) {
+                createGradeChart(grades);
+                document.getElementById('no-data-message').style.display = 'none';
+                document.getElementById('grade-chart').style.display = 'block';
+            } else {
+                document.getElementById('no-data-message').style.display = 'block';
+                document.getElementById('grade-chart').style.display = 'none';
+            }
         } catch (error) {
             console.error('Error loading grades:', error);
             gradesList.innerHTML = '<p class="empty-message">Failed to load grades. Please try again.</p>';
@@ -253,6 +266,152 @@ document.addEventListener('DOMContentLoaded', () => {
                 const subject = e.target.getAttribute('data-subject');
                 deleteSubject(subject);
             });
+        });
+    }
+    
+    // Function to create a chart for grade trends
+    function createGradeChart(grades) {
+        // Get the canvas element
+        const ctx = document.getElementById('grade-chart').getContext('2d');
+        
+        // Group grades by subject
+        const subjectsMap = new Map();
+        
+        // Convert date strings to Date objects and organize by subject
+        grades.forEach(grade => {
+            const subject = grade.subject;
+            const gradeValue = parseFloat(grade.grade);
+            const date = new Date(grade.date);
+            
+            if (!subjectsMap.has(subject)) {
+                subjectsMap.set(subject, []);
+            }
+            
+            subjectsMap.get(subject).push({
+                date: date,
+                grade: gradeValue
+            });
+        });
+        
+        // Sort each subject's grades by date
+        subjectsMap.forEach((grades, subject) => {
+            grades.sort((a, b) => a.date - b.date);
+        });
+        
+        // Prepare datasets for chart
+        const datasets = [];
+        const colors = [
+            { border: 'rgba(186, 85, 255, 1)', background: 'rgba(186, 85, 255, 0.2)' },
+            { border: 'rgba(64, 224, 208, 1)', background: 'rgba(64, 224, 208, 0.2)' },
+            { border: 'rgba(255, 105, 180, 1)', background: 'rgba(255, 105, 180, 0.2)' },
+            { border: 'rgba(50, 205, 50, 1)', background: 'rgba(50, 205, 50, 0.2)' },
+            { border: 'rgba(255, 215, 0, 1)', background: 'rgba(255, 215, 0, 0.2)' },
+            { border: 'rgba(30, 144, 255, 1)', background: 'rgba(30, 144, 255, 0.2)' }
+        ];
+        
+        let colorIndex = 0;
+        
+        subjectsMap.forEach((grades, subject) => {
+            // Use cycling colors
+            const color = colors[colorIndex % colors.length];
+            colorIndex++;
+            
+            datasets.push({
+                label: subject,
+                data: grades.map(g => g.grade),
+                borderColor: color.border,
+                backgroundColor: color.background,
+                tension: 0.4,
+                pointBackgroundColor: color.border,
+                pointBorderColor: '#fff',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            });
+        });
+        
+        // Get all dates from all subjects
+        let allDates = [];
+        subjectsMap.forEach((grades) => {
+            allDates = allDates.concat(grades.map(g => g.date));
+        });
+        
+        // Sort dates and format for labels
+        allDates.sort((a, b) => a - b);
+        
+        // Remove duplicate dates
+        const uniqueDates = [];
+        const dateStrings = new Set();
+        
+        allDates.forEach(date => {
+            const dateString = date.toLocaleDateString();
+            if (!dateStrings.has(dateString)) {
+                dateStrings.add(dateString);
+                uniqueDates.push(date);
+            }
+        });
+        
+        // If we already have a chart, destroy it
+        if (gradeChart) {
+            gradeChart.destroy();
+        }
+        
+        // Create chart
+        gradeChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: uniqueDates.map(date => 
+                    date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                ),
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 1,
+                        max: 6,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(186, 85, 255, 0.5)',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                }
+            }
         });
     }
 });
