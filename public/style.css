@@ -269,7 +269,7 @@ button:hover {
     margin-top: 1rem;
 }
 
-/* Loading screen */
+/* 3D Platonic Solids Loader Styles */
 #loading-screen {
     position: fixed;
     top: 0;
@@ -285,7 +285,6 @@ button:hover {
     transition: opacity 0.5s ease;
 }
 
-/* Purple Geometric Loader Styles */
 :root {
     --purple-light: #c496ff;
     --purple-main: #8a2be2;
@@ -296,8 +295,8 @@ button:hover {
 
 .loader-container {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 450px;
+    height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -315,206 +314,95 @@ button:hover {
     100% { opacity: 0; transform: scale(0.9); }
 }
 
-.hexagon {
+#canvas-container {
     position: absolute;
-    width: 100px;
-    height: 57.74px; /* height = width * sqrt(3)/2 */
-    background-color: transparent;
-    margin: 28.87px 0;
-    border-left: solid 3px var(--purple-main);
-    border-right: solid 3px var(--purple-main);
-    opacity: 0.5;
-    filter: drop-shadow(0 0 5px var(--purple-glow));
-    transform: scale(0.8);
-}
-
-.hexagon:before,
-.hexagon:after {
-    content: "";
-    position: absolute;
-    width: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    left: 0;
-}
-
-.hexagon:before {
-    bottom: 100%;
-    border-bottom: 28.87px solid var(--purple-main);
-}
-
-.hexagon:after {
-    top: 100%;
-    border-top: 28.87px solid var(--purple-main);
-}
-
-.hex-1 {
-    animation: rotation 8s linear infinite, pulse 3s ease-in-out infinite;
-}
-
-.hex-2 {
-    transform: scale(1.3) rotate(30deg);
-    opacity: 0.3;
-    animation: counter-rotation 12s linear infinite, pulse 4s ease-in-out infinite 0.5s;
-}
-
-.hex-3 {
-    transform: scale(1.8) rotate(60deg);
-    opacity: 0.2;
-    border-color: var(--purple-light);
-    animation: rotation 16s linear infinite, pulse 5s ease-in-out infinite 1s;
-}
-
-.hex-3:before,
-.hex-3:after {
-    border-bottom-color: var(--purple-light);
-    border-top-color: var(--purple-light);
-}
-
-@keyframes rotation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes counter-rotation {
-    from { transform: scale(1.3) rotate(30deg); }
-    to { transform: scale(1.3) rotate(-330deg); }
-}
-
-@keyframes pulse {
-    0% { opacity: 0.2; }
-    50% { opacity: 0.7; }
-    100% { opacity: 0.2; }
-}
-
-.circle-container {
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    animation: reverse-rotation 20s linear infinite;
-}
-
-.circle-container-inner {
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    animation: rotation 15s linear infinite;
-}
-
-.circle-container-outer {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    animation: reverse-rotation 25s linear infinite;
-}
-
-.circle {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--purple-light);
-    filter: drop-shadow(0 0 5px var(--purple-glow));
-    opacity: 0;
-}
-
-.circle-inner {
-    width: 6px;
-    height: 6px;
-    background-color: var(--purple-main);
-}
-
-.circle-outer {
-    width: 8px;
-    height: 8px;
-    background-color: var(--purple-dark);
-}
-
-.dot-pulse {
-    animation: dotPulse 2s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-    0%, 100% { transform: scale(1) translateX(60px); }
-    50% { transform: scale(1.3) translateX(60px); }
-}
-
-.dot-trail {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: var(--purple-light);
-    opacity: 0;
-    filter: blur(1px);
+    width: 100%;
+    height: 100%;
 }
 
 .progress-ring {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     transform: rotate(-90deg);
+    z-index: 10;
+    pointer-events: none;
 }
 
 .progress-ring circle {
     fill: transparent;
     stroke: var(--purple-main);
     stroke-width: 4;
-    stroke-dasharray: 251.2; /* Circumference = 2 * PI * 40 */
-    stroke-dashoffset: 251.2;
+    stroke-dasharray: 376.8; /* Circumference = 2 * PI * 60 */
+    stroke-dashoffset: 376.8;
     stroke-linecap: round;
     filter: drop-shadow(0 0 3px var(--purple-glow));
     transition: stroke-dashoffset 0.5s ease;
 }
 
-.loader-text {
+.text {
     position: absolute;
     color: var(--purple-light);
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 2px;
     text-transform: uppercase;
     opacity: 0;
     transform: translateY(20px);
     text-shadow: 0 0 10px var(--purple-glow);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 10;
+    pointer-events: none;
 }
 
-@keyframes reverse-rotation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(-360deg); }
+.grades-text {
+    font-size: 24px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    color: var(--purple-light);
+    text-shadow: 0 0 15px var(--purple-glow);
+    animation: textShimmer 2s infinite alternate-reverse;
 }
 
-/* Utility for dots placement */
-.dot-1 { transform: rotate(0deg) translateX(60px); }
-.dot-2 { transform: rotate(45deg) translateX(60px); }
-.dot-3 { transform: rotate(90deg) translateX(60px); }
-.dot-4 { transform: rotate(135deg) translateX(60px); }
-.dot-5 { transform: rotate(180deg) translateX(60px); }
-.dot-6 { transform: rotate(225deg) translateX(60px); }
-.dot-7 { transform: rotate(270deg) translateX(60px); }
-.dot-8 { transform: rotate(315deg) translateX(60px); }
+@keyframes textShimmer {
+    0% {
+        text-shadow: 0 0 15px var(--purple-glow), 0 0 5px var(--purple-light);
+        color: var(--purple-light);
+    }
+    50% {
+        text-shadow: 0 0 25px var(--purple-glow), 0 0 10px var(--purple-main);
+        color: white;
+    }
+    100% {
+        text-shadow: 0 0 15px var(--purple-glow), 0 0 5px var(--purple-light);
+        color: var(--purple-light);
+    }
+}
 
-/* Inner dots placement */
-.dot-in-1 { transform: rotate(0deg) translateX(35px); }
-.dot-in-2 { transform: rotate(60deg) translateX(35px); }
-.dot-in-3 { transform: rotate(120deg) translateX(35px); }
-.dot-in-4 { transform: rotate(180deg) translateX(35px); }
-.dot-in-5 { transform: rotate(240deg) translateX(35px); }
-.dot-in-6 { transform: rotate(300deg) translateX(35px); }
+#sparkContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9;
+}
 
-/* Outer dots placement */
-.dot-out-1 { transform: rotate(0deg) translateX(80px); }
-.dot-out-2 { transform: rotate(30deg) translateX(80px); }
-.dot-out-3 { transform: rotate(60deg) translateX(80px); }
-.dot-out-4 { transform: rotate(90deg) translateX(80px); }
-.dot-out-5 { transform: rotate(120deg) translateX(80px); }
-.dot-out-6 { transform: rotate(150deg) translateX(80px); }
-.dot-out-7 { transform: rotate(180deg) translateX(80px); }
-.dot-out-8 { transform: rotate(210deg) translateX(80px); }
-.dot-out-9 { transform: rotate(240deg) translateX(80px); }
-.dot-out-10 { transform: rotate(270deg) translateX(80px); }
-.dot-out-11 { transform: rotate(300deg) translateX(80px); }
-.dot-out-12 { transform: rotate(330deg) translateX(80px); }
+/* Media queries for responsive loader */
+@media (max-width: 500px) {
+    .loader-container {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .progress-ring {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .progress-ring circle {
+        stroke-dasharray: 314.2; /* Circumference = 2 * PI * 50 */
+        stroke-dashoffset: 314.2;
+    }
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
@@ -528,7 +416,7 @@ button:hover {
         margin-bottom: 1.5rem;
     }
     
-    h2 {
+    h2 {    
         font-size: 1.5rem;
     }
     
